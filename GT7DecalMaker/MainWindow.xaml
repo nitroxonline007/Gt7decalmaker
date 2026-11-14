@@ -1,0 +1,115 @@
+<Window x:Class="GT7DecalMaker.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="GT7 Decal Maker - PNG to SVG (15KB limit)"
+        Width="1280" Height="800" MinWidth="960" MinHeight="640"
+        Background="#FF1E1E1E" AllowDrop="True"
+        Drop="Window_Drop" DragOver="Window_DragOver">
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Background="#FF2D2D30" Padding="8,6">
+            <DockPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="BtnOpen" Content="Open PNG..." Click="BtnOpen_Click" Padding="12,4"/>
+                    <TextBlock x:Name="TxtFile" Margin="10,0,0,0" VerticalAlignment="Center"
+                               Foreground="#FFBBBBBB" TextTrimming="CharacterEllipsis" MaxWidth="340"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
+                    <Button x:Name="BtnConvert" Content="Convert" Click="BtnConvert_Click" Padding="18,4"
+                            FontWeight="Bold" IsEnabled="False"/>
+                    <Button x:Name="BtnSave" Content="Save SVG..." Click="BtnSave_Click" Padding="12,4"
+                            Margin="8,0,0,0" IsEnabled="False"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <Border DockPanel.Dock="Bottom" Background="#FF2D2D30" Padding="8,4">
+            <DockPanel>
+                <Border x:Name="SizeBadge" DockPanel.Dock="Right" CornerRadius="3" Padding="10,3"
+                        Background="#FF555555">
+                    <TextBlock x:Name="TxtBadge" Text="-- KB" FontWeight="Bold" Foreground="White"/>
+                </Border>
+                <TextBlock x:Name="TxtStatus" Text="Open a PNG to begin." VerticalAlignment="Center"
+                           Foreground="#FFCCCCCC"/>
+            </DockPanel>
+        </Border>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="270"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Background="#FF252526" Padding="10">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Text="SETTINGS" Foreground="#FF00B4EF" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                        <TextBlock Foreground="#FFDDDDDD">
+                            <TextBlock.Text><Binding ElementName="SldWorkRes" Path="Value" StringFormat="Working resolution: {0} px"/></TextBlock.Text>
+                        </TextBlock>
+                        <Slider x:Name="SldWorkRes" Minimum="96" Maximum="768" Value="384" TickFrequency="32"
+                                IsSnapToTickEnabled="True" TickPlacement="BottomRight"/>
+
+                        <TextBlock Foreground="#FFDDDDDD" Margin="0,12,0,0">
+                            <TextBlock.Text><Binding ElementName="SldColors" Path="Value" StringFormat="Max colors: {0}"/></TextBlock.Text>
+                        </TextBlock>
+                        <Slider x:Name="SldColors" Minimum="2" Maximum="32" Value="16" IsSnapToTickEnabled="True"/>
+
+                        <TextBlock Foreground="#FFDDDDDD" Margin="0,12,0,0">
+                            <TextBlock.Text><Binding ElementName="SldDetail" Path="Value" StringFormat="Detail level: {0}"/></TextBlock.Text>
+                        </TextBlock>
+                        <Slider x:Name="SldDetail" Minimum="1" Maximum="10" Value="8" IsSnapToTickEnabled="True"/>
+
+                        <TextBlock Foreground="#FFDDDDDD" Margin="0,12,0,0">
+                            <TextBlock.Text><Binding ElementName="SldDespeckle" Path="Value" StringFormat="Despeckle: {0} px&#178;"/></TextBlock.Text>
+                        </TextBlock>
+                        <Slider x:Name="SldDespeckle" Minimum="0" Maximum="64" Value="4" IsSnapToTickEnabled="True"/>
+
+                        <TextBlock Foreground="#FFDDDDDD" Text="GT7 upload limit:" Margin="0,14,0,2"/>
+                        <DockPanel>
+                            <TextBlock DockPanel.Dock="Right" Text="KB" VerticalAlignment="Center" Foreground="#FF888888"/>
+                            <TextBox x:Name="TxtTargetKB" Text="15" Padding="4,2" MaxLength="5"/>
+                        </DockPanel>
+
+                        <CheckBox x:Name="ChkAutoFit" Content="Auto-fit under limit (max quality)" IsChecked="True" Foreground="#FFDDDDDD" Margin="0,14,0,0"/>
+                        <CheckBox x:Name="ChkSeamFill" Content="Anti-seam stroke (recommended)" IsChecked="True" Foreground="#FFDDDDDD" Margin="0,8,0,0"/>
+                        <CheckBox x:Name="ChkBgRemove" Content="Auto-remove flat background" IsChecked="True" Foreground="#FFDDDDDD" Margin="0,8,0,0"/>
+                        <CheckBox x:Name="ChkKeepText" Content="Keep lettering sharp (K20, logos)" IsChecked="True" Foreground="#FFDDDDDD" Margin="0,8,0,0"/>
+                        <CheckBox x:Name="ChkAutoRes" Content="Auto-resolution (use size budget)" IsChecked="True" Foreground="#FFDDDDDD" Margin="0,8,0,0"/>
+                        <CheckBox x:Name="ChkAutoSave" Content="Auto-save SVG to Desktop\svg" IsChecked="True" Foreground="#FFDDDDDD" Margin="0,8,0,0"/>
+
+                        <Separator Margin="0,14,0,10" Background="#FF3F3F46"/>
+                        <TextBlock TextWrapping="Wrap" Foreground="#FF999999"
+                                   Text="Export SVG &#8594; copy to USB stick (FAT32) &#8594; GT7 Livery Editor &#8594; My Decals &#8594; Import Decal."/>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <Grid Grid.Column="1" Margin="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Column="0" Text="SOURCE" Foreground="#FFAAAAAA" FontWeight="Bold" Margin="4,0,0,4"/>
+                <TextBlock Grid.Column="1" Text="VECTOR RESULT" Foreground="#FFAAAAAA" FontWeight="Bold" Margin="8,0,0,4"/>
+
+                <Border Grid.Row="1" Grid.Column="0" Background="{StaticResource CheckerBase}" BorderBrush="#FF3F3F46" BorderThickness="1" Margin="0,0,8,0">
+                    <Viewbox Stretch="Uniform" Margin="8">
+                        <Image x:Name="ImgSource" MaxWidth="600" MaxHeight="600"/>
+                    </Viewbox>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="1" Background="{StaticResource CheckerBrush}" BorderBrush="#FF3F3F46" BorderThickness="1">
+                    <Viewbox Stretch="Uniform" Margin="8">
+                        <ContentControl x:Name="VectorHost"/>
+                    </Viewbox>
+                </Border>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>

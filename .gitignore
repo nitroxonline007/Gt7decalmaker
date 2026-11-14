@@ -1,0 +1,12 @@
+# build output
+bin/
+obj/
+dist/
+dist-sc/
+*.user
+.vs/
+
+# test artifacts and local sample images
+GT7DecalMaker.Tests/testout/
+GT7DecalMaker.Tests/samples/
+trace.txt
