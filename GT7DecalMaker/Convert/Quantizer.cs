@@ -133,12 +133,11 @@ public static class Quantizer
 
     // Luma-weighted RGB distance plus a tint term: the off-gray part of the
     // difference is weighted heavily, so silver never reads as "close" to pale green.
-    public const int TintWeight = 3;
     internal static long Dist(long dr, long dg, long db)
     {
         long m = (dr + dg + db) / 3;
         long cr = dr - m, cg = dg - m, cb = db - m;
-        return dr * dr * 2 + dg * dg * 4 + db * db + TintWeight * 3 * (cr * cr + cg * cg + cb * cb);
+        return dr * dr * 2 + dg * dg * 4 + db * db + (long)(Tunables.TintWeight * 3 * (cr * cr + cg * cg + cb * cb));
     }
 
     private static long ColorDist(byte[] a, byte[] b)

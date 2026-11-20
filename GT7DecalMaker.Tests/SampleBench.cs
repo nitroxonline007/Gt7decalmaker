@@ -29,6 +29,8 @@ public static class SampleBench
         return rc;
     }
 
+    public static void SaveRender(ConvertResult r, int w, int h, string path) => SavePng(Rasterize(r, w, h), w, h, path);
+
     static byte[] Rasterize(ConvertResult r, int w, int h)
     {
         var dv = new DrawingVisual();

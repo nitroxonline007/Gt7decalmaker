@@ -10,3 +10,6 @@ dist-sc/
 GT7DecalMaker.Tests/testout/
 GT7DecalMaker.Tests/samples/
 trace.txt
+gym/images/
+gym/out/
+gym/*.log

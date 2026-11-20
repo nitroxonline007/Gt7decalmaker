@@ -70,7 +70,7 @@ public static class QualitySearch
         int maxC = Math.Max(2, baseSettings.MaxColors);
         var colorList = new[] { 2, 3, 4, 5, 6, 7, 8, 10, 12, 16, 24, 32 }
             .Where(c => c <= maxC).ToList();
-        int[] despList = { 4, 8, 16 };
+        int[] despList = Tunables.DespeckleSet;
 
         var bufCache = new System.Collections.Concurrent.ConcurrentDictionary<int, Lazy<PixelBuffer>>();
         PixelBuffer At(int r) => bufCache.GetOrAdd(r, k => new Lazy<PixelBuffer>(() => Get(k))).Value;
@@ -112,7 +112,7 @@ public static class QualitySearch
                     return r;
                 }
 
-                double epsHi = 3.5, epsLo = 0.5;
+                double epsHi = Tunables.EpsMax, epsLo = Tunables.EpsMin;
                 var loose = Try(epsHi);
                 if (loose.Bytes > targetBytes) break; // higher res only gets bigger
                 ConvertResult fit = loose;

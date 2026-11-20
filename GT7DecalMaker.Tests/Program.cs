@@ -65,6 +65,7 @@ public static class Program
 
     public static int Main(string[] args)
     {
+        if (args.Length > 0 && args[0] == "gym") { return Gym.Run(args.Skip(1).ToArray()); }
         if (args.Length > 0 && args[0] == "sample") { return SampleBench.Run(args.Skip(1).ToArray()); }
         if (args.Length > 0 && args[0] == "micro") { RunMicroRepro(); return 0; }
         if (args.Length > 0 && args[0] == "ocr") { return RunOcrCheck().GetAwaiter().GetResult(); }

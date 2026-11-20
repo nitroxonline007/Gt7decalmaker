@@ -9,8 +9,10 @@ namespace GT7DecalMaker.Convert;
 public static class DetailOverlay
 {
     public static ConvertResult Compose(ConvertResult baseR, PixelBuffer hi, int targetBytes,
-        double minContrast = 70, double eps = 0.6)
+        double minContrast = -1, double eps = -1)
     {
+        if (minContrast < 0) minContrast = Tunables.DetailMinContrast;
+        if (eps < 0) eps = Tunables.DetailEps;
         int W = hi.Width, H = hi.Height;
         double kx = (double)W / baseR.Width, ky = (double)H / baseR.Height;
 
@@ -92,7 +94,7 @@ public static class DetailOverlay
             int same = cm.Touch.Where(kv => comps[kv.Key].Color == around).Sum(kv => kv.Value);
             double purity = (double)same / total;
             double contrast = ColorContrast(pal[cm.Color], pal[around]);
-            if (contrast < minContrast || purity < 0.8) continue;
+            if (contrast < minContrast || purity < Tunables.DetailPurity) continue;
             int wrong = 0;
             for (int y = cm.Y0; y <= cm.Y1; y++)
                 for (int x = cm.X0; x <= cm.X1; x++)
@@ -179,7 +181,7 @@ public static class DetailOverlay
                 Array.Copy(hi.Pixels, ((win.Y0 + y) * W + win.X0) * 4, crop, y * ww * 4, ww * 4);
             var r = ConvertEngine.Run(new PixelBuffer(ww, wh, crop), new ConvertSettings
             {
-                Epsilon = eps, DespecklePx = 3, SeamFill = baseR.Settings.SeamFill,
+                Epsilon = eps, DespecklePx = Tunables.DetailDespeckle, SeamFill = baseR.Settings.SeamFill,
                 RemoveFlatBackground = false, Stacked = true, DetailScale = 0, PaletteOverride = palList
             });
             foreach (var L in r.Layers)

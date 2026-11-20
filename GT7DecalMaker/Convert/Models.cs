@@ -25,7 +25,7 @@ public sealed class ConvertSettings
     // Keep small specks whose brightness differs from their surroundings by this much (0 = off).
     public double ProtectContrast { get; set; } = 0;
     // Max edge tolerance for a shape = its smaller side x this (0 = off).
-    public double DetailScale { get; set; } = 0.12;
+    public double DetailScale { get; set; } = Tunables.DetailScale;
     // Spend part of the budget on a full-res detail layer so lettering stays readable.
     public bool KeepText { get; set; } = true;
     public List<(byte R, byte G, byte B)>? PaletteOverride { get; set; }
